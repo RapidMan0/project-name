@@ -2,20 +2,23 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { Location } from './entities/location.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
+
 export class LocationsService {
+  constructor(
+    @InjectRepository(Location)
+    private locationsRepository: Repository<Location>,
+  ) {}
+
   private locations: Location[] = [
     new Location({ id: 1, city: 'Moscow', country: 'Russia', userId: 1 }),
     new Location({ id: 2, city: 'Saint Petersburg', country: 'Russia', userId: 2 }),
     new Location({ id: 3, city: 'Balti', country: 'Moldova', userId: 3 })
   ];
   private nextId: number;
-
-  constructor() {
-    // вычисляем следующий id как max(existing ids) + 1, чтобы избежать дубликатов
-    this.nextId = this.locations.reduce((max, l) => Math.max(max, l.id ?? 0), 0) + 1;
-  }
 
   create(dto: CreateLocationDto) {
     const location = new Location({ id: this.nextId++, ...dto });

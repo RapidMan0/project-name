@@ -2,9 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User) 
+    private usersRepository: Repository<User>,
+  ) {}
+  
   private users: User[] = [
     new User({ id: 1, name: 'Ivan Petrov', email: 'ivan.petrov@example.com', locationId: 1 }),
     new User({ id: 2, name: 'Olga Smirnova', email: 'olga.smirnova@example.com', locationId: 2 }),
