@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LocationsService } from '../locations/locations.service';
-import { Location } from '../locations/entities/location.entity'; // добавлено
 
 @Controller('users')
 export class UsersController {
@@ -14,35 +13,44 @@ export class UsersController {
 
   @Post()
   create(@Body() dto: CreateUserDto) {
-    return this.usersService.create(dto); //dto - data transfer object
+    return this.usersService.create(dto);
   }
 
   @Get()
-  findAll() {
-    const users = this.usersService.findAll();
-    return users.map(user => {
-      let location: Location | null = null; // тип явно указан
+  async findAll() {
+    const users = await this.usersService.findAll();
+    return Promise.all(users.map(async user => {
+      let location: import('../locations/entities/location.entity').Location | null = null;
       if (user.locationId) {
         try {
-          location = this.locationsService.findOne(user.locationId);
+          location = await this.locationsService.findOne(user.locationId);
         } catch {
           location = null;
         }
       }
       return { ...user, location };
-    });
+    }));
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.findOne(id);
+    let location: import('../locations/entities/location.entity').Location | null = null;
+    if (user.locationId) {
+      try {
+        location = await this.locationsService.findOne(user.locationId);
+      } catch {
+        location = null;
+      }
+    }
+    return { ...user, location };
   }
 
-  @Get(':id/location') //am adaugat
-  getLocation(@Param('id', ParseIntPipe) id: number) {
-    const user = this.usersService.findOne(id); // выбросит NotFoundException, если юзер не найден
+  @Get(':id/location')
+  async getLocation(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.findOne(id);
     if (!user.locationId) throw new NotFoundException(`Location for user #${id} not set`);
-    return this.locationsService.findOne(user.locationId);
+    return await this.locationsService.findOne(user.locationId);
   }
 
   @Patch(':id')

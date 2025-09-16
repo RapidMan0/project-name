@@ -1,4 +1,3 @@
-
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
@@ -8,14 +7,14 @@ export const databaseProviders = [
       const dataSource = new DataSource({
         type: 'postgres',
         host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'root',
-        database: 'test',
+        port: 5432, // исправлено
+        username: 'postgres', // ваш пользователь
+        password: 'user228', // ваш пароль
+        database: 'labone', // ваша база
         entities: [
-            __dirname + '/../**/*.entity{.ts,.js}',
+          __dirname + '/../**/*.entity{.ts,.js}',
         ],
-        synchronize: false,
+        synchronize: false, // true только для разработки!
       });
 
       return dataSource.initialize();

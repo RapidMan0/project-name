@@ -6,51 +6,42 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-
 export class LocationsService {
   constructor(
     @InjectRepository(Location)
     private locationsRepository: Repository<Location>,
   ) {}
 
-  private locations: Location[] = [
-    new Location({ id: 1, city: 'Moscow', country: 'Russia', userId: 1 }),
-    new Location({ id: 2, city: 'Saint Petersburg', country: 'Russia', userId: 2 }),
-    new Location({ id: 3, city: 'Balti', country: 'Moldova', userId: 3 })
-  ];
-  private nextId: number;
-
-  create(dto: CreateLocationDto) {
-    const location = new Location({ id: this.nextId++, ...dto });
-    this.locations.push(location);
-    return location;
+  async create(dto: CreateLocationDto): Promise<Location> {
+    const location = this.locationsRepository.create(dto);
+    return await this.locationsRepository.save(location);
   }
 
-  findAll() {
-    return this.locations;
+  async findAll(): Promise<Location[]> {
+    return await this.locationsRepository.find();
   }
 
-  findOne(id: number) {
-    const loc = this.locations.find(l => l.id === id);
+  async findOne(id: number): Promise<Location> {
+    const loc = await this.locationsRepository.findOne({ where: { id } });
     if (!loc) throw new NotFoundException(`Location #${id} not found`);
     return loc;
   }
 
-  findByUserId(userId: number) {
-    const loc = this.locations.find(l => l.userId === userId);
+  async findByUserId(userId: number): Promise<Location> {
+    const loc = await this.locationsRepository.findOne({ where: { userId } });
     if (!loc) throw new NotFoundException(`Location for user #${userId} not found`);
     return loc;
   }
 
-  update(id: number, dto: UpdateLocationDto) {
-    const loc = this.findOne(id);
+  async update(id: number, dto: UpdateLocationDto): Promise<Location> {
+    const loc = await this.findOne(id);
     Object.assign(loc, dto);
-    return loc;
+    return await this.locationsRepository.save(loc);
   }
 
-  remove(id: number) {
-    const index = this.locations.findIndex(l => l.id === id);
-    if (index === -1) throw new NotFoundException(`Location #${id} not found`);
-    return this.locations.splice(index, 1)[0];
+  async remove(id: number): Promise<Location> {
+    const loc = await this.findOne(id);
+    await this.locationsRepository.remove(loc);
+    return loc;
   }
 }
