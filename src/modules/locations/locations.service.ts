@@ -27,9 +27,10 @@ export class LocationsService {
     return loc;
   }
 
-  async findByUserId(userId: number): Promise<Location> {
-    const loc = await this.locationsRepository.findOne({ where: { userId } });
-    if (!loc) throw new NotFoundException(`Location for user #${userId} not found`);
+
+  async findByLocationId(locationId: number): Promise<Location> {
+    const loc = await this.locationsRepository.findOne({ where: { id: locationId } });
+    if (!loc) throw new NotFoundException(`Location #${locationId} not found`);
     return loc;
   }
 

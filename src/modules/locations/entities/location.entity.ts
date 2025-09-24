@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
@@ -12,10 +12,6 @@ export class Location {
   @Column({ nullable: true })
   country?: string;
 
-  @Column()
-  userId: number;
-
-  @OneToOne(() => User, user => user.location)
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @OneToMany(() => User, user => user.location)
+  users: User[];
 }

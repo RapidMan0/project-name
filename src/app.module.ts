@@ -16,7 +16,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      synchronize: false, // true только для разработки!
+      synchronize: false,
       autoLoadEntities: true,
     }),
     UsersModule,

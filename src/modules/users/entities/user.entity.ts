@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Location } from '../../locations/entities/location.entity';
 
 @Entity()
@@ -13,12 +13,12 @@ export class User {
     email?: string;
 
     @Column({ nullable: true })
+    age?: number;
+
+    @Column({ name: 'location_id', nullable: true })
     locationId?: number;
 
-    @OneToOne(() => Location, location => location.user, { cascade: true, eager: false })
+    @ManyToOne(() => Location)
+    @JoinColumn({ name: 'location_id' })
     location?: Location;
-
-    constructor(partial: Partial<User>) { //partial makes all properties optional
-        Object.assign(this, partial); //assigns the properties of the partial object to the instance
-    }
 }

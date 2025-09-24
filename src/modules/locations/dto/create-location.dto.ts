@@ -12,8 +12,4 @@ export class CreateLocationDto {
   @IsString({ message: 'Country must be a string', context: { field: 'country' } })
   country?: string;
 
-  @ApiProperty()
-  @Type(() => Number)
-  @IsInt({ message: 'userId must be an integer', context: { field: 'userId' } })
-  userId: number;
 }

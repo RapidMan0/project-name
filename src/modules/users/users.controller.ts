@@ -23,7 +23,7 @@ export class UsersController {
       let location: import('../locations/entities/location.entity').Location | null = null;
       if (user.locationId) {
         try {
-          location = await this.locationsService.findOne(user.locationId);
+          location = await this.locationsService.findByLocationId(user.locationId);
         } catch {
           location = null;
         }
@@ -38,7 +38,7 @@ export class UsersController {
     let location: import('../locations/entities/location.entity').Location | null = null;
     if (user.locationId) {
       try {
-        location = await this.locationsService.findOne(user.locationId);
+        location = await this.locationsService.findByLocationId(user.locationId);
       } catch {
         location = null;
       }
@@ -50,7 +50,7 @@ export class UsersController {
   async getLocation(@Param('id', ParseIntPipe) id: number) {
     const user = await this.usersService.findOne(id);
     if (!user.locationId) throw new NotFoundException(`Location for user #${id} not set`);
-    return await this.locationsService.findOne(user.locationId);
+    return this.locationsService.findByLocationId(user.locationId);
   }
 
   @Patch(':id')
