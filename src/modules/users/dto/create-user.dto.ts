@@ -15,7 +15,6 @@ export class CreateUserDto {
   @IsEmail({}, { message: 'Email must be a valid email address' })
   email?: string;
 
-  
   @ApiPropertyOptional({ type: 'number', minimum: 0, maximum: 150 })
   @IsOptional()
   @Type(() => Number)
