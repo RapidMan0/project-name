@@ -1,15 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, IsInt } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional } from 'class-validator';
 
 export class CreateLocationDto {
   @ApiProperty()
-  @IsString({ message: 'City must be a string', context: { field: 'city' } })
+  @IsString({ message: 'validation.city_string' })
   city: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString({ message: 'Country must be a string', context: { field: 'country' } })
+  @IsString({ message: 'validation.country_string' })
   country?: string;
-
 }

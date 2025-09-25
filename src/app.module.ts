@@ -5,6 +5,8 @@ import { UsersModule } from './modules/users/users.module';
 import { LocationsModule } from './modules/locations/locations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { I18nModule, QueryResolver, HeaderResolver } from 'nestjs-i18n';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -21,6 +23,17 @@ import { ConfigModule } from '@nestjs/config';
     }),
     UsersModule,
     LocationsModule,
+    I18nModule.forRoot({
+      fallbackLanguage: 'ru',
+      loaderOptions: {
+        path: path.join(process.cwd(), 'src', 'i18n'), // <-- всегда ищет src/i18n из корня проекта!
+        watch: true,
+      },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        { use: HeaderResolver, options: ['x-custom-lang'] }
+      ],
+    }),
   ],
   controllers: [AppNameController],
   providers: [AppService],

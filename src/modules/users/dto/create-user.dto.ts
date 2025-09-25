@@ -4,27 +4,28 @@ import { Type } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty()
-  @IsString({ message: 'Name must be a string' })
-  @IsNotEmpty({ message: 'Name is required' })
-  @MinLength(2, { message: 'Name must be at least $constraint1 characters' })
-  @Matches(/^[\p{L}\s'-]+$/u, { message: 'Name must not contain numbers or symbols' })
+  @IsString({ message: 'validation.name_string' })
+  @IsNotEmpty({ message: 'validation.name_required' })
+  @MinLength(2, { message: 'validation.name_min_length' })
+  @Matches(/^[\p{L}\s'-]+$/u, { message: 'validation.name_no_symbols' })
   name: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsEmail({}, { message: 'Email must be a valid email address' })
+  @IsEmail({}, { message: 'validation.email_invalid' })
   email?: string;
 
   @ApiPropertyOptional({ type: 'number', minimum: 0, maximum: 150 })
   @IsOptional()
   @Type(() => Number)
-  @IsInt({ message: 'Age must be an integer' })
-  @Min(0, { message: 'Age must be at least $constraint1' })
-  @Max(150, { message: 'Age must be at most $constraint1' })
+  @IsInt({ message: 'validation.age_integer' })
+  @Min(0, { message: 'validation.age_min' })
+  @Max(150, { message: 'validation.age_max' })
   age?: number;
+
   @ApiPropertyOptional({ type: 'number' })
   @IsOptional()
   @Type(() => Number)
-  @IsInt({ message: 'locationId must be an integer' })
+  @IsInt({ message: 'validation.location_id_integer' })
   locationId?: number;
 }

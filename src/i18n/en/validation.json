@@ -1,0 +1,13 @@
+{
+  "name_string": "Name must be a string",
+  "name_required": "Name is required",
+  "name_min_length": "Name must be at least 2 characters",
+  "name_no_symbols": "Name must not contain numbers or symbols",
+  "email_invalid": "Must be a valid email address",
+  "age_integer": "Age must be an integer",
+  "age_min": "Age must be at least 0",
+  "age_max": "Age must be at most 150",
+  "location_id_integer": "LocationId must be an integer",
+  "city_string": "City must be a string",
+  "country_string": "Country must be a string"
+}
